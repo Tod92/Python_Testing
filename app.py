@@ -3,12 +3,6 @@ from flask import Flask,render_template,request,redirect,flash,url_for
 from models import Club
 
 
-# def loadClubs():
-#     with open('clubs.json') as c:
-#          listOfClubs = json.load(c)['clubs']
-#          return listOfClubs
-
-
 def loadCompetitions():
     with open('competitions.json') as comps:
          listOfCompetitions = json.load(comps)['competitions']
@@ -27,14 +21,12 @@ def index():
 
 @app.route('/showSummary',methods=['POST'])
 def showSummary():
-    # club = [club for club in clubs if club['email'] == request.form['email']][0]
     email = request.form['email']
-    print(email)
     club = Club.get_club(email)
-    print(club)
     if club:
         return render_template('welcome.html',club=club,competitions=competitions)
     else:
+        flash('Sorry, that email wasn\'t found.')
         return render_template('index.html')
 
 @app.route('/book/<competition>/<club>')
