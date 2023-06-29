@@ -40,7 +40,7 @@ class Club():
         return None
     
 
-class Competitions():
+class Competition():
     
     def __init__(self, name, date, points):
         self.name = name

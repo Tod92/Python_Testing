@@ -1,6 +1,6 @@
 import json
 from flask import Flask,render_template,request,redirect,flash,url_for
-from models import Club
+from models import Club, Competition
 
 
 def loadCompetitions():
@@ -12,8 +12,8 @@ def loadCompetitions():
 app = Flask(__name__)
 app.secret_key = 'something_special'
 
-competitions = loadCompetitions()
-# clubs = loadClubs()
+competitions = Competition.get_competitions_from_json()
+clubs = Club.get_clubs_from_json()
 
 @app.route('/')
 def index():
