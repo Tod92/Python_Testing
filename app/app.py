@@ -1,5 +1,5 @@
 import json
-from flask import Flask,render_template,request,redirect,flash,url_for
+from flask import Flask,render_template,request,redirect,flash,url_for,Blueprint
 from app.models import Club, Competition
 
 
@@ -8,18 +8,23 @@ def loadCompetitions():
          listOfCompetitions = json.load(comps)['competitions']
          return listOfCompetitions
 
+def create_app():
+    app = Flask(__name__)
+    app.secret_key = 'something_special'
+    app.register_blueprint(main)
+    return app
 
-app = Flask(__name__)
-app.secret_key = 'something_special'
+main = Blueprint("main", __name__)
+
 
 competitions = Competition.get_competitions_from_json()
 clubs = Club.get_clubs_from_json()
 
-@app.route('/')
+@main.route('/')
 def index():
     return render_template('index.html')
 
-@app.route('/showSummary',methods=['POST'])
+@main.route('/showSummary',methods=['POST'])
 def showSummary():
     email = request.form['email']
     club = Club.get_club(email=email)
@@ -29,7 +34,7 @@ def showSummary():
         flash('Sorry, that email wasn\'t found.')
         return render_template('index.html')
 
-@app.route('/book/<competition>/<club>')
+@main.route('/book/<competition>/<club>')
 def book(competition,club):
     foundClub = [c for c in clubs if c['name'] == club][0]
     foundCompetition = [c for c in competitions if c['name'] == competition][0]
@@ -40,7 +45,7 @@ def book(competition,club):
         return render_template('welcome.html', club=club, competitions=competitions)
 
 
-@app.route('/purchasePlaces',methods=['POST'])
+@main.route('/purchasePlaces',methods=['POST'])
 def purchasePlaces():
     competition = [c for c in competitions if c['name'] == request.form['competition']][0]
     club = [c for c in clubs if c['name'] == request.form['club']][0]
@@ -53,6 +58,6 @@ def purchasePlaces():
 # TODO: Add route for points display
 
 
-@app.route('/logout')
+@main.route('/logout')
 def logout():
     return redirect(url_for('index'))

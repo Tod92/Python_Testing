@@ -32,13 +32,10 @@ class Club():
     @classmethod
     def get_club(cls, name=None, email=None):
         clubs = Club.get_club_list()
-        print(clubs)
         for c in clubs:
-            print(c.email)
             if c.name == name:
                 return c
             elif c.email == email:
-                print("ici")
                 return c
         return None
     
