@@ -1,7 +1,7 @@
 import json
 
-CLUBS_FILE = "data/clubs.json"
-COMPETITIONS_FILE = "data/competitions.json"
+CLUBS_FILE = "../data/clubs.json"
+COMPETITIONS_FILE = "../data/competitions.json"
 
 class Club():
     
@@ -15,12 +15,20 @@ class Club():
 
     @classmethod
     def get_clubs_from_json(cls):
+        """
+        Reads JSON file 
+        Returns a dict
+        """
         with open(CLUBS_FILE) as c:
             listOfClubs = json.load(c)['clubs']
         return listOfClubs
     
     @classmethod
     def get_club_list(cls):
+        """
+        Reads JSON file (with get_clubs_from_json method)
+        Returns a list of Club Objects
+        """
         result = []
         listOfClubs = Club.get_clubs_from_json()
         
