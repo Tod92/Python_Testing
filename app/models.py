@@ -47,6 +47,27 @@ class Club():
                 return c
         return None
     
+    def save(self):
+        # Get list of all Club instances from json file
+        clubs = Club.get_club_list()
+        # Replace self in club list
+        clubs = [self if c.name == self.name else c for c in clubs]
+        print('club remplacement')
+        print('clubs : ', clubs)
+        # Transform Club instances to dict
+        clubs = [c.__dict__ for c in clubs]
+        print('clubs : ', clubs)
+        # Transform to fit json file format {"clubs":[clubList]}
+        clubs = {"clubs":clubs}
+        print('clubs : ', clubs)
+        # # Dumps into json
+        # json_clubs = json.dumps(clubs)     
+        # print('JSON_CLUBS : ', json_clubs)
+        file = open(CLUBS_FILE, 'w')
+        json.dump(clubs, file)
+        file.close()
+        pass
+
 
 class Competition():
     
