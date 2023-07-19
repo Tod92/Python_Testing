@@ -52,29 +52,22 @@ class Club():
         clubs = Club.get_club_list()
         # Replace self in club list
         clubs = [self if c.name == self.name else c for c in clubs]
-        print('club remplacement')
-        print('clubs : ', clubs)
         # Transform Club instances to dict
         clubs = [c.__dict__ for c in clubs]
-        print('clubs : ', clubs)
         # Transform to fit json file format {"clubs":[clubList]}
         clubs = {"clubs":clubs}
-        print('clubs : ', clubs)
-        # # Dumps into json
-        # json_clubs = json.dumps(clubs)     
-        # print('JSON_CLUBS : ', json_clubs)
+        # Dumps into json file
         file = open(CLUBS_FILE, 'w')
         json.dump(clubs, file)
         file.close()
-        pass
 
 
 class Competition():
     
-    def __init__(self, name, date, points):
+    def __init__(self, name, date, numberOfPlaces):
         self.name = name
-        self.email = date
-        self.points = points
+        self.date = date
+        self.numberOfPlaces = numberOfPlaces
 
     def __repr__(self):
         return self.name
@@ -91,14 +84,28 @@ class Competition():
         listOfCompetitions = Competition.get_competitions_from_json()
         
         for c in listOfCompetitions:
-            instance = cls(c["name"],c["date"],c["points"])
+            instance = cls(c["name"],c["date"],c["numberOfPlaces"])
             result.append(instance)
         return result
 
     @classmethod
     def get_competition(cls, name=None):
-        competitions = Competition.get_club_list()
+        competitions = Competition.get_competition_list()
         for c in competitions:
             if c.name == name:
                 return c
         return None
+    
+    def save(self):
+        # Get list of all Competition instances from json file
+        competitions = Competition.get_competition_list()
+        # Replace self in competition list
+        competitions = [self if c.name == self.name else c for c in competitions]
+        # Transform competition instances to dict
+        competitions = [c.__dict__ for c in competitions]
+        # Transform to fit json file format {"competitions":[competitionList]}
+        competitions = {"competitions":competitions}
+        # Dumps into json file
+        file = open(COMPETITIONS_FILE, 'w')
+        json.dump(competitions, file)
+        file.close()
