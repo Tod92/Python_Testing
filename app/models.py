@@ -5,10 +5,11 @@ COMPETITIONS_FILE = "../data/competitions.json"
 
 class Club():
     
-    def __init__(self, name, email, points):
+    def __init__(self, name, email, points, bookings={}):
         self.name = name
         self.email = email
         self.points = points
+        self.bookings = bookings
 
     def __repr__(self):
         return self.name
@@ -47,6 +48,11 @@ class Club():
                 return c
         return None
     
+    def db_write(self, json_file):
+        file = open(CLUBS_FILE, 'w')
+        json.dump(json_file, file)
+        file.close()
+
     def save(self):
         # Get list of all Club instances from json file
         clubs = Club.get_club_list()
@@ -57,10 +63,9 @@ class Club():
         # Transform to fit json file format {"clubs":[clubList]}
         clubs = {"clubs":clubs}
         # Dumps into json file
-        file = open(CLUBS_FILE, 'w')
-        json.dump(clubs, file)
-        file.close()
-
+        self.db_write(clubs)
+        # Returns writed club list when sucess
+        return clubs
 
 class Competition():
     
@@ -95,7 +100,12 @@ class Competition():
             if c.name == name:
                 return c
         return None
-    
+
+    def db_write(self, json_file):
+        file = open(CLUBS_FILE, 'w')
+        json.dump(json_file, file)
+        file.close()
+
     def save(self):
         # Get list of all Competition instances from json file
         competitions = Competition.get_competition_list()
@@ -106,6 +116,5 @@ class Competition():
         # Transform to fit json file format {"competitions":[competitionList]}
         competitions = {"competitions":competitions}
         # Dumps into json file
-        file = open(COMPETITIONS_FILE, 'w')
-        json.dump(competitions, file)
-        file.close()
+        self.db_write(competitions)
+        return competitions
