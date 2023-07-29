@@ -61,7 +61,7 @@ class Club():
         # Transform Club instances to dict
         clubs = [c.__dict__ for c in clubs]
         # Transform to fit json file format {"clubs":[clubList]}
-        clubs = {"clubs":clubs}
+        clubs = {"clubs":clubs} 
         # Dumps into json file
         self.db_write(clubs)
         # Returns writed club list when sucess
@@ -102,7 +102,7 @@ class Competition():
         return None
 
     def db_write(self, json_file):
-        file = open(CLUBS_FILE, 'w')
+        file = open(COMPETITIONS_FILE, 'w')
         json.dump(json_file, file)
         file.close()
 

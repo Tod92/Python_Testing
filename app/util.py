@@ -16,6 +16,7 @@ def book(club: Club, competition: Competition, placesRequired: int):
     competition.numberOfPlaces = int(competition.numberOfPlaces)
 
     if club.points < placesRequired:
+        print("HERE")
         return "Club can't afford that many places. Not enough points left."
     elif competition.numberOfPlaces < placesRequired:
         return "Competition has not enough places left to do this"
@@ -23,7 +24,7 @@ def book(club: Club, competition: Competition, placesRequired: int):
     elif placesRequired > MAX_PLACES_PER_COMP:
         return f'Maximum places per competition for a club is {MAX_PLACES_PER_COMP}'
     elif competition.name in club.bookings.keys():
-        if club.bookings[competition.name] + placesRequired > MAX_PLACES_PER_COMP:
+        if int(club.bookings[competition.name]) + placesRequired > MAX_PLACES_PER_COMP:
             return f'Club can\'t book more than {MAX_PLACES_PER_COMP} places for this competition'
 
     else:
