@@ -1,0 +1,19 @@
+{% if clubs %}
+<style>
+    table, th, td {
+      border:1px solid black;
+    }
+</style>
+<table>
+    <tr>
+        <th>Club</th>
+        <th>Points</th>
+    </tr>  
+    {% for c in clubs %}
+        <tr>
+            <td>{{c.name}}</td>
+            <td>{{c.points}}</td>
+        </tr>
+    {% endfor %}         
+</table>
+{% endif %}

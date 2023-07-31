@@ -16,6 +16,9 @@
        </ul>
     {% endif%}
     Points available: {{club['points']}}
+    <br><br>
+    {% include 'dashboard.html' %}
+
     <h3>Competitions:</h3>
     <ul>
         {% for comp in competitions%}
@@ -31,6 +34,5 @@
         {% endfor %}
     </ul>
     {%endwith%}
-
 </body>
 </html>

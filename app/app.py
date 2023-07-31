@@ -22,15 +22,18 @@ main = Blueprint("main", __name__)
 
 @main.route('/')
 def index():
-    return render_template('index.html')
+    clubs = Club.get_club_list()
+    competitions = Competition.get_competition_list()
+    return render_template('index.html', clubs=clubs, competitions=competitions)
 
 @main.route('/showSummary',methods=['POST'])
 def showSummary():
     email = request.form['email']
     club = Club.get_club(email=email)
+    clubs = Club.get_club_list()
     competitions = Competition.get_competition_list()
     if club:
-        return render_template('welcome.html',club=club,competitions=competitions)
+        return render_template('welcome.html',club=club,clubs=clubs,competitions=competitions)
     else:
         flash('Sorry, that email wasn\'t found.')
         return render_template('index.html')
