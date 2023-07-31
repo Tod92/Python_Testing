@@ -2,6 +2,8 @@ import json
 
 CLUBS_FILE = "../data/clubs.json"
 COMPETITIONS_FILE = "../data/competitions.json"
+BOOKINGS_FILE = "../data/bookings.json"
+
 
 class Club():
     
@@ -118,3 +120,55 @@ class Competition():
         # Dumps into json file
         self.db_write(competitions)
         return competitions
+
+
+class Booking():
+    """
+    Class to track bookings per club
+    """
+    def __init__(self, club_name, competition_name, nb_booked):
+        self.club_name = club_name
+        self.competition_name = competition_name
+        self.nb_booked = nb_booked
+    
+    @classmethod
+    def get_bookings_from_json(cls):
+        with open(BOOKINGS_FILE) as c:
+            listOfBookings = json.load(c)['bookings']
+        return listOfBookings
+    
+    @classmethod
+    def get_booking_list(cls):
+        result = []
+        listOfBookings = Booking.get_bookings_from_json()
+        
+        for b in listOfBookings:
+            instance = cls(b["club_name"],b["competition_name"],c["nb_booked"])
+            result.append(instance)
+        return result
+
+    @classmethod
+    def get_booking(cls, club_name=None, competition_name=None):
+        bookings = Booking.get_booking_list()
+        for b in bookings:
+            if b.club_name == club_name and b.competition_name == competition_name:
+                return b
+        return None
+
+    def db_write(self, json_file):
+        file = open(BOOKINGS_FILE, 'w')
+        json.dump(json_file, file)
+        file.close()
+
+    # def save(self):
+    #     # Get list of all Booking instances from json file
+    #     bookings = Booking.get_booking_list()
+    #     # Replace self in booking list
+    #     bookings = [self if c.name == self.name else c for c in bookings]
+    #     # Transform booking instances to dict
+    #     bookings = [c.__dict__ for c in bookings]
+    #     # Transform to fit json file format {"bookings":[bookingList]}
+    #     bookings = {"bookings":bookings}
+    #     # Dumps into json file
+    #     self.db_write(bookings)
+    #     return bookings
