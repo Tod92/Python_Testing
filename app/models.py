@@ -150,6 +150,7 @@ class Booking():
     @classmethod
     def get_bookings(cls, club_name=None):
         """
+        Return Booking instance for the searched club name
         """
         bookings = Booking.get_booking_list()
         for b in bookings:
