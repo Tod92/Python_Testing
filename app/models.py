@@ -125,11 +125,11 @@ class Competition():
 class Booking():
     """
     Class to track bookings per club
+    booked format : {"competition_name" : nb_places, ..}
     """
-    def __init__(self, club_name, competition_name, nb_booked):
+    def __init__(self, club_name, booked= {}):
         self.club_name = club_name
-        self.competition_name = competition_name
-        self.nb_booked = nb_booked
+        self.booked = booked
     
     @classmethod
     def get_bookings_from_json(cls):
@@ -143,32 +143,45 @@ class Booking():
         listOfBookings = Booking.get_bookings_from_json()
         
         for b in listOfBookings:
-            instance = cls(b["club_name"],b["competition_name"],c["nb_booked"])
+            instance = cls(b["club_name"],b["booked"])
             result.append(instance)
         return result
 
     @classmethod
-    def get_booking(cls, club_name=None, competition_name=None):
+    def get_bookings(cls, club_name=None):
+        """
+        """
         bookings = Booking.get_booking_list()
         for b in bookings:
-            if b.club_name == club_name and b.competition_name == competition_name:
+            if b.club_name == club_name:
                 return b
         return None
 
+    def get_booking(self, competition_name=None):
+        """
+        Returns nb_booked for competition_name
+        None if not found
+        """
+        return self.booked.get(competition_name)
+    
     def db_write(self, json_file):
         file = open(BOOKINGS_FILE, 'w')
         json.dump(json_file, file)
         file.close()
 
-    # def save(self):
-    #     # Get list of all Booking instances from json file
-    #     bookings = Booking.get_booking_list()
-    #     # Replace self in booking list
-    #     bookings = [self if c.name == self.name else c for c in bookings]
-    #     # Transform booking instances to dict
-    #     bookings = [c.__dict__ for c in bookings]
-    #     # Transform to fit json file format {"bookings":[bookingList]}
-    #     bookings = {"bookings":bookings}
-    #     # Dumps into json file
-    #     self.db_write(bookings)
-    #     return bookings
+    def save(self):
+        # Get list of all Booking instances from json file
+        bookings = Booking.get_booking_list()
+        # Replace self in booking list
+        bookings = [self if b.club_name == self.club_name else b for b in bookings]
+        if self not in bookings:
+            bookings.append(self)
+        # Transform booking instances to dict
+        bookings = [b.__dict__ for b in bookings]
+        # Transform to fit json file format {"bookings":[bookingList]}
+        bookings = {"bookings":bookings}
+        print(bookings)
+
+        # Dumps into json file
+        self.db_write(bookings)
+        return bookings
