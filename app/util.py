@@ -1,6 +1,8 @@
 from app.models import Club, Competition, Booking
 
+
 MAX_PLACES_PER_COMP = 12
+
 
 def book(club: Club, competition: Competition, placesRequired: int):
     """
@@ -24,7 +26,7 @@ def book(club: Club, competition: Competition, placesRequired: int):
 
     # Check places already booked for this club
     nb_already_booked = None
-    bookings = Booking.get_bookings(club_name=club.name)
+    bookings = Booking.get_bookings(name=club.name)
     if bookings:
         # Stays with None value if not found
         nb_already_booked = bookings.get_booking(competition_name=competition.name)
@@ -37,15 +39,15 @@ def book(club: Club, competition: Competition, placesRequired: int):
 
     club.points = str(club.points)
     competition.numberOfPlaces = str(competition.numberOfPlaces)
-    
+
     # Add to club's bookings dict
-    if bookings == None:
-        bookings = Booking(club_name=club.name)
+    if bookings is None:
+        bookings = Booking(name=club.name)
     if nb_already_booked:
         bookings.booked[competition.name] += placesRequired
     else:
         bookings.booked[competition.name] = placesRequired
-   
+
     club.save()
     competition.save()
     bookings.save()
