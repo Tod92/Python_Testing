@@ -33,7 +33,7 @@ def showSummary():
     email = request.form['email']
     club = Club.get_club(email=email)
     clubs = Club.get_list()
-    competitions = Competition.get_competition_list()
+    competitions = Competition.get_list()
     if club:
         return render_template('welcome.html', club=club, clubs=clubs, competitions=competitions)
     else:
