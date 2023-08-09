@@ -4,6 +4,12 @@
 
 
     This is a proof of concept (POC) project to show a light-weight version of our competition booking platform. The aim is the keep things as light as possible, and use feedback from the users to iterate.
+    Main functionalities are :
+
+    * Checking available points for each club in a table. Does not require login to the app.
+
+    * After logging in with club's email, booking places to a wanted competition.
+
 
 2. Getting Started
 
@@ -33,7 +39,7 @@
 
     - Flask requires that you set an environmental variable to the python file. However you do that, you'll want to set the file to be <code>server.py</code>. Check [here](https://flask.palletsprojects.com/en/1.1.x/quickstart/#a-minimal-application) for more details
 
-    - You should now be ready to test the application. In the directory, type either <code>flask run</code> or <code>python -m flask run</code>. The app should respond with an address you should be able to go to using your browser.
+    - You should now be ready to test the application. In the "app" directory, type either <code>flask run</code> or <code>python -m flask run</code>. The app should respond with an address you should be able to go to using your browser.
 
 4. Current Setup
 
@@ -41,7 +47,8 @@
      
     * competitions.json - list of competitions
     * clubs.json - list of clubs with relevant information. You can look here to see what email addresses the app will accept for login.
-
+    * bookings.json - list of clubs with information needed to track bookings already done for specific competitions.  
+      
 5. Testing
 
     You are free to use whatever testing framework you like-the main thing is that you can show what tests you are using.
@@ -49,3 +56,4 @@
     We also like to show how well we're testing, so there's a module called 
     [coverage](https://coverage.readthedocs.io/en/coverage-5.1/) you should add to your project.
 
+    To check our testings, see git branch named "QA"
