@@ -1,6 +1,6 @@
 import pytest
 
-from app.app import create_app
+from app.server import create_app
 
 # Data paths for test
 TEST_CLUBS_FILE = "../tests/data/test_clubs.json"

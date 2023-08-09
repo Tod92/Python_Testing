@@ -1,22 +1,5 @@
-import time
-from locust import HttpUser, task, between
+from locust import HttpUser, task
 
-# class QuickstartUser(HttpUser):
-#     wait_time = between(1, 5)
-
-#     @task
-#     def hello_world(self):
-#         self.client.get("/hello")
-#         self.client.get("/world")
-
-#     @task(3)
-#     def view_items(self):
-#         for item_id in range(10):
-#             self.client.get(f"/item?id={item_id}", name="/item")
-#             time.sleep(1)
-
-#     def on_start(self):
-#         self.client.post("/login", json={"username":"foo", "password":"bar"})
 
 class ProjectPerfTest(HttpUser):
     @task
@@ -30,3 +13,7 @@ class ProjectPerfTest(HttpUser):
     @task(2)
     def book(self):
         self.client.get("/book/Spring Festival/Simply Lift")
+    
+    @task
+    def purchase(self):
+        self.client.post("/purchasePlaces", {"competition":"Fall Classic", "club":"She Lifts", "places":"1"})
