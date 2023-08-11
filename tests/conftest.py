@@ -1,4 +1,4 @@
-import pytest
+import pytest, json
 from app import models
 from app.server import create_app
 
@@ -79,3 +79,17 @@ def client():
     app = create_app({"TESTING": True})
     with app.test_client() as client:
         yield client
+
+def testfiles_rebuilder():
+        clubs_json = {models.Club._json_key_name: EXPECTED_CLUBS}
+        file = open(TEST_CLUBS_FILE, 'w')
+        json.dump(clubs_json, file)
+        file.close
+        competitions_json = {models.Competition._json_key_name: EXPECTED_COMPETITIONS}
+        file = open(TEST_COMPETITIONS_FILE, 'w')
+        json.dump(competitions_json, file)
+        file.close
+        bookings_json = {models.Booking._json_key_name: EXPECTED_BOOKINGS}
+        file = open(TEST_BOOKINGS_FILE, 'w')
+        json.dump(bookings_json, file)
+        file.close

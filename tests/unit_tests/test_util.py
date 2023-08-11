@@ -2,15 +2,10 @@ from tests.conftest import (
     TEST_CLUBS_FILE,
     TEST_COMPETITIONS_FILE,
     TEST_BOOKINGS_FILE,
-    EXPECTED_CLUBS,
-    EXPECTED_COMPETITIONS,
-    EXPECTED_BOOKINGS,
-    CLUBS_INSTANCES,
-    COMPETITIONS_INSTANCES,
-    BOOKINGS_INSTANCES
+    testfiles_rebuilder
     )
 from app import models, util
-import json
+
 
 class TestClass:
     def setup_class(cls):
@@ -20,18 +15,8 @@ class TestClass:
         cls.competition = models.Competition(name="Spring Festival",date="01012023",numberOfPlaces="0")
 
     def teardown_class(cls):
-        clubs_json = {models.Club._json_key_name: EXPECTED_CLUBS}
-        file = open(TEST_CLUBS_FILE, 'w')
-        json.dump(clubs_json, file)
-        file.close
-        competitions_json = {models.Competition._json_key_name: EXPECTED_COMPETITIONS}
-        file = open(TEST_COMPETITIONS_FILE, 'w')
-        json.dump(competitions_json, file)
-        file.close
-        bookings_json = {models.Booking._json_key_name: EXPECTED_BOOKINGS}
-        file = open(TEST_BOOKINGS_FILE, 'w')
-        json.dump(bookings_json, file)
-        file.close
+        # Rebuilds json test files
+        testfiles_rebuilder()
 
     def mocking_json_files(self, mocker):
         mocker.patch.object(models.Club, '_json_file_path', TEST_CLUBS_FILE)

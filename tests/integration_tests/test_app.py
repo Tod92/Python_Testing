@@ -1,12 +1,13 @@
-from tests.conftest import TEST_CLUBS_FILE, TEST_COMPETITIONS_FILE, TEST_BOOKINGS_FILE
+from tests.conftest import TEST_CLUBS_FILE, TEST_COMPETITIONS_FILE, TEST_BOOKINGS_FILE, testfiles_rebuilder
 from app import models
 
-
-class TestClass:
+class Parent:
     def mocking_json_files(self, mocker):
         mocker.patch.object(models.Club, '_json_file_path', TEST_CLUBS_FILE)
         mocker.patch.object(models.Competition, '_json_file_path', TEST_COMPETITIONS_FILE)
         mocker.patch.object(models.Booking, '_json_file_path', TEST_BOOKINGS_FILE)
+
+class TestGet(Parent):
 
     def test_index_should_status_code_ok(self, client, mocker):
         self.mocking_json_files(mocker)
@@ -32,7 +33,6 @@ class TestClass:
     def test_login_user(self, client, mocker):
         # Mocking club json file to use test version
         self.mocking_json_files(mocker)
-
         response = client.post('/showSummary',data=dict(email='john@simplylift.co'),follow_redirects=True)
         data = response.data.decode()
         assert response.status_code == 200
@@ -47,4 +47,18 @@ class TestClass:
         data = response.data.decode()
         assert data.find("<th>Club</th>") != -1
         assert data.find("<td>Iron Temple</td>") != -1
+
+class TestPost(Parent):
+    def teardown_method(self):
+        testfiles_rebuilder()
+
+    def test_purchase_places_should_work(self, client, mocker):
+        self.mocking_json_files(mocker)
+        response = client.post('/purchasePlaces',
+                               data=dict(club='Simply Lift',
+                                         competition='Fall Classic',
+                                         places='5'))
+        data = response.data.decode()
+        assert data.find('Great-booking complete!') != -1
+
 
