@@ -7,6 +7,7 @@ from flask import (
     url_for,
     Blueprint
     )
+import datetime
 from app.models import Club, Competition
 from app import util
 
@@ -32,10 +33,11 @@ def index():
 def showSummary():
     email = request.form['email']
     club = Club.get_club(email=email)
-    clubs = Club.get_list()
-    competitions = Competition.get_list()
     if club:
-        return render_template('welcome.html', club=club, clubs=clubs, competitions=competitions)
+        clubs = Club.get_list()
+        competitions = Competition.get_list()        
+        today = str(datetime.date.today())
+        return render_template('welcome.html', club=club, clubs=clubs, competitions=competitions, today=today)
     else:
         flash('Sorry, that email wasn\'t found.')
         return render_template('index.html', clubs=clubs)
@@ -51,7 +53,8 @@ def book(competition, club):
         flash("Something went wrong-please try again")
         clubs = Club.get_list()
         competitions = Competition.get_competition_list()
-        return render_template('welcome.html', club=club, clubs=clubs, competitions=competitions)
+        today = str(datetime.date.today())
+        return render_template('welcome.html', club=club, clubs=clubs, competitions=competitions, today=today)
 
 
 @main.route('/purchasePlaces', methods=['POST'])
@@ -66,7 +69,8 @@ def purchasePlaces():
         flash('ERROR : ' + sucess)
     clubs = Club.get_list()
     competitions = Competition.get_list()
-    return render_template('welcome.html', club=club, clubs=clubs, competitions=competitions)
+    today = str(datetime.date.today())
+    return render_template('welcome.html', club=club, clubs=clubs, competitions=competitions, today=today)
 
 
 @main.route('/logout')
