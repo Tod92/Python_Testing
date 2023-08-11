@@ -33,8 +33,8 @@ def index():
 def showSummary():
     email = request.form['email']
     club = Club.get_club(email=email)
+    clubs = Club.get_list()
     if club:
-        clubs = Club.get_list()
         competitions = Competition.get_list()        
         today = str(datetime.date.today())
         return render_template('welcome.html', club=club, clubs=clubs, competitions=competitions, today=today)

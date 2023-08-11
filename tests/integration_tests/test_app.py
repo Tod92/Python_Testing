@@ -30,7 +30,21 @@ class TestGet(Parent):
         response = client.get('/showSummary')
         assert response.status_code == 405
 
-    def test_login_user(self, client, mocker):
+    def test_index_should_render_table(self, client, mocker):
+        self.mocking_json_files(mocker)
+        response = client.get('/')
+        data = response.data.decode()
+        assert data.find("<th>Club</th>") != -1
+        assert data.find("<td>Iron Temple</td>") != -1
+
+class TestPost(Parent):
+    def setup_class(self):
+        testfiles_rebuilder()
+
+    def teardown_method(self):
+        testfiles_rebuilder()
+
+    def test_login_user_should_work(self, client, mocker):
         # Mocking club json file to use test version
         self.mocking_json_files(mocker)
         response = client.post('/showSummary',data=dict(email='john@simplylift.co'),follow_redirects=True)
@@ -40,17 +54,13 @@ class TestGet(Parent):
         assert data.find("Welcome to the GUDLFT Registration Portal!") == -1
         # Should welcome user
         assert data.find("Welcome, john@simplylift.co") != -1
-
-    def test_index_should_render_table(self, client, mocker):
+    
+    def test_login_user_with_unknown_mail_should_message(self, client, mocker):
         self.mocking_json_files(mocker)
-        response = client.get('/')
+        response = client.post('/showSummary',data=dict(email='mario@nintendo.com'),follow_redirects=True)
         data = response.data.decode()
-        assert data.find("<th>Club</th>") != -1
-        assert data.find("<td>Iron Temple</td>") != -1
-
-class TestPost(Parent):
-    def teardown_method(self):
-        testfiles_rebuilder()
+        assert response.status_code == 200
+        assert data.find('Sorry, that email wasn\'t found.') == -1
 
     def test_purchase_places_should_work(self, client, mocker):
         self.mocking_json_files(mocker)
